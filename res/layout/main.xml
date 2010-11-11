@@ -14,6 +14,11 @@
 	            android:layout_height="wrap_content"
 	            android:text="Using AsyncTask"/>	 
 	            
+	    <Button android:id="@+id/btn_async_task_simple_configured"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:text="Using AsyncTask Configured"/>	            
+	            
 	    <Button android:id="@+id/btn_async_task_complex"
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"

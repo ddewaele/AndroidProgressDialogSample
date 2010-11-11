@@ -17,6 +17,9 @@
                   android:label="@string/app_name"/>
         <activity android:name=".AsyncTaskSimple"
                   android:label="@string/app_name"/>
+        <activity android:name=".AsyncTaskSimpleConfigured"
+        		 android:configChanges="keyboardHidden|orientation"
+                  android:label="@string/app_name"/>                  
         <activity android:name=".AsyncTaskComplex"
                   android:label="@string/app_name"/>
 
