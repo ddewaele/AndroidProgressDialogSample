@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    >
+	    <Button android:id="@+id/btn_launch_all_on_ui"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:text="All On UI Thread"/>
+
+	    <Button android:id="@+id/btn_async_task_simple"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:text="Using AsyncTask"/>	 
+	            
+	    <Button android:id="@+id/btn_async_task_complex"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:text="Using AsyncTask Complex"/>	 
+
+</LinearLayout>
