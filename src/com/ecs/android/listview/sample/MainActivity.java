@@ -6,6 +6,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+/**
+ * Puts 4 buttons on the screen to demonstrate the different behavior of the progress dialog.
+ * For each button, an OnClickListener is defined that starts the appropriate activity. 
+ */
 public class MainActivity extends Activity {
 
 	@Override

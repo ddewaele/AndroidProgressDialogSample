@@ -11,8 +11,6 @@ import android.widget.Toast;
 public class AsyncTaskComplex extends AbstractListActivity {
 
 	private static final String TAG =  AsyncTaskComplex.class.getSimpleName(); 
-	private static final int LOADING_DIALOG = 0;
-	private static final int CLEANING_DIALOG = 1;
 
     private ListRefresher mTask; 
     private boolean mShownDialog; 
@@ -22,10 +20,13 @@ public class AsyncTaskComplex extends AbstractListActivity {
         super.onCreate(savedInstanceState);
 
         Object retained = getLastNonConfigurationInstance(); 
+        // After a screen orientation change, we associate the current ( = newly created) activity
+        // with the restored asyncTask.
         if ( retained instanceof ListRefresher ) { 
                 Log.i(TAG, "Reclaiming previous background task."); 
                 mTask = (ListRefresher) retained; 
                 mTask.setActivity(this); 
+        // On a clean activity startup, we create a new task and associate the current activity.
         } else { 
                 Log.i(TAG, "Creating new background task."); 
                 mTask = new ListRefresher(this); 
@@ -33,6 +34,10 @@ public class AsyncTaskComplex extends AbstractListActivity {
         }         
     }
 	
+	/**
+	 * After a screen orientation change, this method is invoked.
+	 * We disassociate the activity from the task.
+	 */
     @Override 
     public Object onRetainNonConfigurationInstance() { 
             mTask.setActivity(null); 
@@ -42,10 +47,13 @@ public class AsyncTaskComplex extends AbstractListActivity {
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		//removeDialog(LOADING_DIALOG);
-		
 	}
-	
+
+	/**
+	 * When the aSyncTask has notified the activity that it has completed,
+	 * we can refresh the list control, and attempt to dismiss the dialog.
+	 * We'll only dismiss the dialog 
+	 */
     private void onTaskCompleted() { 
         Log.i(TAG, "Activity " + this + " has been notified the task is complete."); 
         //Check added because dismissDialog throws an exception if the current 
@@ -59,6 +67,12 @@ public class AsyncTaskComplex extends AbstractListActivity {
         } 
 } 	
 	
+    /**
+     * Our complex async task that holds a reference to the Activity that started it,
+     * and a boolean to determine if the task completed.
+     * @author Davy
+     *
+     */
 	private class ListRefresher extends AsyncTask<Uri, Void, Void> {
 
 		 private AsyncTaskComplex activity; 
@@ -68,23 +82,35 @@ public class AsyncTaskComplex extends AbstractListActivity {
                  this.activity = activity; 
          } 
          
+        /**
+         * Showing the dialog on the UI thread.
+         */
 		@Override
 		protected void onPreExecute() {
 			activity.showDialog(LOADING_DIALOG);
 		}
 		
+        /**
+         * Performing the heavy lifting in the background thread thread.
+         */
 		@Override
 		protected Void doInBackground(Uri... params) {
 			refreshListLongRunning();
 			return null;
 		}
 
+		/**
+		 * When the task is completed, notifiy the Activity.
+		 */
         @Override 
         protected void onPostExecute(Void unused) { 
                 completed = true; 
-                refreshListView();
                 notifyActivityTaskCompleted(); 
         } 
+        
+        /**
+         * Helper method to notify the activity that this task was completed.
+         */
         private void notifyActivityTaskCompleted() { 
                 if ( null != activity ) { 
                         activity.onTaskCompleted(); 
@@ -99,31 +125,11 @@ public class AsyncTaskComplex extends AbstractListActivity {
         } 
 	}
 	
-	private class ListClearer extends AsyncTask<Uri, Void, Void> {
-
-		
-
-		@Override
-		protected void onPreExecute() {
-			//super.onPreExecute();
-			showDialog(CLEANING_DIALOG);
-		}
-		
-		@Override
-		protected Void doInBackground(Uri... params) {
-			clearList();
-			return null;
-		}
-		
-		@Override
-		protected void onPostExecute(Void result) {
-			//super.onPostExecute(result);
-			//STATIC_ACTIVITY_VARIABLE.dismissDialog(CLEANING_DIALOG);
-			dismissDialog(CLEANING_DIALOG);
-			refreshListView();
-		}
-	}	
-	
+	/**
+	 * Here, we're maintaining the mShownDialog flag in the activity so that it knows that the 
+	 * progress dialog has been shown. The flag is required when dismissing the dialog, as the only 
+	 * activity that is allowed to dismiss the dialog is the activity that has also created it.
+	 */
     @Override 
     protected void onPrepareDialog(int id, Dialog dialog) { 
             super.onPrepareDialog(id, dialog); 
@@ -131,20 +137,22 @@ public class AsyncTaskComplex extends AbstractListActivity {
                     mShownDialog = true; 
             } 
     } 	
-	
+
+    /**
+     * Here, we're executing the async task by passing on our activity.
+     * Inside the async task, a reference to this activity is kept for proper dialog progress handling.
+     */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    switch (item.getItemId()) {
 		    case R.id.refresh_list:
-		    	//showDialog(PROGRESS_DIALOG);
-		    	//refreshList();
-		    	//dismissDialog(PROGRESS_DIALOG);
 		    	mTask = new ListRefresher(this); 
 		    	mTask.execute();
 		        return true;	
 		    case R.id.clear_list:
-		    	new ListClearer().execute();
-		        return true;		        
+		    	clearList();
+		    	refreshListView();
+		    	return true;
 		    default:
 		        return super.onOptionsItemSelected(item);
 	    }

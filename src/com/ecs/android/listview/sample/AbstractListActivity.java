@@ -14,13 +14,24 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.widget.SimpleAdapter;
 
-public class AbstractListActivity extends ListActivity {
+/**
+ * Abstract ListActivity class that implements some basic functionality for the samples.
+ * It basically creates our list layout, and offers the following methods 
+ * 
+ * refreshListLongRunning (refreshes our list data)
+ * refreshListView (refreshes our list control with the new data)
+ * clearList (clears the list)
+ * onCreateOptionsMenu (creates our menu - all activities in the sample have a refresh and clear list)
+ * onCreateDialog (creates our dialog - LOADING_DIALOG)
+ * 
+ */
+public abstract class AbstractListActivity extends ListActivity {
 	
+	protected static final int LOADING_DIALOG = 0;
 	private static final int LONG_RUNNING_TIME = 2000;
 
 	private static final String TAG =  MainActivity.class.getSimpleName();
 	
-	protected static final int LOADING_DIALOG = 0;
 	protected List<Map<String, String>> listItems = new ArrayList<Map<String, String>>();
 	
 	@Override

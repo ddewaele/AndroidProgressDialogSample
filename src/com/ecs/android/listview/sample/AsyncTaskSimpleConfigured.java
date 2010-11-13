@@ -1,9 +1,12 @@
 package com.ecs.android.listview.sample;
 
 /**
- * We're just extending the basic asynctask activity.
+ * For this Activity, we're just extending the basic asynctask activity.
  * 
- * The manifest for this activity contains : android:configChanges="keyboardHidden|orientation"
+ * By having a seperate Activity, we can change the manifest 
+ * for this activity with the following activity property : 
+ * 
+ * android:configChanges="keyboardHidden|orientation"
  * 
  */
 public class AsyncTaskSimpleConfigured extends AsyncTaskSimple {
