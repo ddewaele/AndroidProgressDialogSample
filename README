@@ -1,0 +1,24 @@
+Sample code showing some Activities that display a progress dialog to the user, 
+and have different ways of reacting during screen orientation changes.
+
+The app allows you to launch the following activities.
+
+* "AllOnUIThread"
+A sample where a progress dialog is created and dismissed on the UI thread.
+Added to illustrate that the progress dialog will never be shown.
+
+* "AsyncTaskSimple"
+Implementation using an AsyncTask, where the progress dialog will be shown, but causes problems
+during screen orientation.
+
+"AsyncTaskSimpleStateSaving"
+Implementation based on the previous AsyncTask, but now with a simple state saving mechanism, 
+again causing problems during screen orientation.
+
+"AsyncTaskSimpleConfigured"
+Implementation based on android:configChanges="keyboardHidden|orientation", where the activity is not 
+re-created after a screen orientation change in order to handle screen orientations gracefully. 
+ 
+"AsyncTaskComplex"
+A more complex implementation that handles screen orientations gracefully without resorting to the 
+android:configChanges "fix".
