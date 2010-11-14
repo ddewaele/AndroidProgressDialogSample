@@ -12,16 +12,21 @@
 	    <Button android:id="@+id/btn_async_task_simple"
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
-	            android:text="Using AsyncTask"/>	 
+	            android:text="Using AsyncTask Simple"/>	 
+	            
+	    <Button android:id="@+id/btn_async_task_simple_state"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:text="Using AsyncTask With StateSaving"/>	 
 	            
 	    <Button android:id="@+id/btn_async_task_simple_configured"
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
-	            android:text="Using AsyncTask Configured"/>	            
+	            android:text="Using AsyncTask Manifest Configured"/>	            
 	            
 	    <Button android:id="@+id/btn_async_task_complex"
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
-	            android:text="Using AsyncTask Complex"/>	 
+	            android:text="Using AsyncTask Complex Logic"/>	 
 
 </LinearLayout>

@@ -1,5 +1,8 @@
 package com.ecs.android.listview.sample;
 
+import java.util.List;
+import java.util.Map;
+
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -14,29 +17,35 @@ import android.view.MenuItem;
  * When the task has finished, we'll dismiss the dialog (back in the UI thread).
  * 
  * As opposed to the AllOnUIThread activity, this time, the progress dialog will be shown properly.
- * However, this example causes a problem during a screen orientation change.
  * 
  */
-public class AsyncTaskSimple extends AbstractListActivity {
+public class AsyncTaskSimpleStateSaving extends AbstractListActivity {
 
+	/**
+	 * Intelligent onCreate that takes into account the last known configuration instance.
+	 * When an activity is destroyed (as a result of a screen rotate), the onRetainNonConfigurationInstance
+	 * method is called, where we can return any state that we want to restore here.
+	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		new ListRefresher().execute(); 
+		Object retained = getLastNonConfigurationInstance(); 
+		if (retained==null) {
+			new ListRefresher().execute();
+		} else {
+			this.listItems = (List<Map<String, String>>) retained; 
+			refreshListView();
+		}
 	}
 	
-	@Override
-	protected void onDestroy() {
-		removeDialog(LOADING_DIALOG);
-		super.onDestroy();
-	}
-	
+	/**
+	 * Cache the already fetched listItems. 
+	 * This will be picked up in the onCreate method.
+	 */
     @Override 
     public Object onRetainNonConfigurationInstance() {
-    	return super.onRetainNonConfigurationInstance();
+    	return listItems;
     } 	
-    
-    
 	
 	/**
 	 * Our menu trigger will launch the asynctask, allowing a background thread to be spawned.
@@ -80,7 +89,7 @@ public class AsyncTaskSimple extends AbstractListActivity {
 		 */
 		@Override
 		protected Void doInBackground(Uri... params) {
-			listItems = retrieveListLongRunning();
+			listItems=retrieveListLongRunning();
 			return null;
 		}
 

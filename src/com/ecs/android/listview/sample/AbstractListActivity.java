@@ -9,6 +9,7 @@ import android.app.Dialog;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -28,7 +29,7 @@ import android.widget.SimpleAdapter;
 public abstract class AbstractListActivity extends ListActivity {
 	
 	protected static final int LOADING_DIALOG = 0;
-	private static final int LONG_RUNNING_TIME = 2000;
+	protected static final int LONG_RUNNING_TIME = 5000;
 
 	private static final String TAG =  MainActivity.class.getSimpleName();
 	
@@ -40,12 +41,9 @@ public abstract class AbstractListActivity extends ListActivity {
         setContentView(R.layout.list);
 	}
 	
-	protected void refreshListLongRunning() {
-		
-		try {
-			Thread.sleep(LONG_RUNNING_TIME);
-		} catch (InterruptedException e) {
-		}
+	protected List<Map<String, String>> retrieveListLongRunning() {
+		List<Map<String, String>> listItems;
+		SystemClock.sleep(LONG_RUNNING_TIME);
 		listItems = new ArrayList<Map<String, String>>();		
 		for (int i=1 ; i<=10 ; i++) {
 			Map<String, String> itemData = new HashMap<String, String>();
@@ -53,6 +51,7 @@ public abstract class AbstractListActivity extends ListActivity {
 			listItems.add(itemData);
 		}
 		Log.i(TAG, "done refreshList");
+		return listItems;
 	}
 	
 	protected void refreshListView() {

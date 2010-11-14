@@ -14,14 +14,18 @@
 
         
         <activity android:name=".AllOnUIThread"
-                  android:label="@string/app_name"/>
+                  android:label="AllOnUIThread"/>
         <activity android:name=".AsyncTaskSimple"
-                  android:label="@string/app_name"/>
+                  android:label="AsyncTaskSimple"/>
+        <activity android:name=".AsyncTaskSimpleStateSaving"
+                  android:label="AsyncTaskSimpleStateSaving"/>
         <activity android:name=".AsyncTaskSimpleConfigured"
         		 android:configChanges="keyboardHidden|orientation"
-                  android:label="@string/app_name"/>                  
+                  android:label="AsyncTaskSimpleConfigured"/>                  
         <activity android:name=".AsyncTaskComplex"
-                  android:label="@string/app_name"/>
+                  android:label="AsyncTaskComplex"/>
+        <activity android:name=".RotationAsync"
+                  android:label="RotationAsync"/>
 
 
     </application>

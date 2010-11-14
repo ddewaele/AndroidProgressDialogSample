@@ -1,5 +1,9 @@
 package com.ecs.android.listview.sample;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 import android.app.Dialog;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -15,18 +19,20 @@ public class AsyncTaskComplex extends AbstractListActivity {
     private ListRefresher mTask; 
     private boolean mShownDialog; 
     
+    /**
+     * After a screen orientation change, we associate the current ( = newly created) activity
+     * with the restored asyncTask.
+     * On a clean activity startup, we create a new task and associate the current activity. 
+     */
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         Object retained = getLastNonConfigurationInstance(); 
-        // After a screen orientation change, we associate the current ( = newly created) activity
-        // with the restored asyncTask.
         if ( retained instanceof ListRefresher ) { 
                 Log.i(TAG, "Reclaiming previous background task."); 
                 mTask = (ListRefresher) retained; 
                 mTask.setActivity(this); 
-        // On a clean activity startup, we create a new task and associate the current activity.
         } else { 
                 Log.i(TAG, "Creating new background task."); 
                 mTask = new ListRefresher(this); 
@@ -36,7 +42,8 @@ public class AsyncTaskComplex extends AbstractListActivity {
 	
 	/**
 	 * After a screen orientation change, this method is invoked.
-	 * We disassociate the activity from the task.
+	 * As we're going to state save the task, we can no longer associate 
+	 * it with the Activity that is going to be destroyed here.
 	 */
     @Override 
     public Object onRetainNonConfigurationInstance() { 
@@ -56,11 +63,12 @@ public class AsyncTaskComplex extends AbstractListActivity {
 	 */
     private void onTaskCompleted() { 
         Log.i(TAG, "Activity " + this + " has been notified the task is complete."); 
+        this.listItems = mTask.getItems();
+        refreshListView();
         //Check added because dismissDialog throws an exception if the current 
         //activity hasn't shown it. This Happens if task finishes early enough 
         //before an orientation change that the dialog is already gone when 
         //the previous activity bundles up the dialogs to reshow. 
-        refreshListView();
         if ( mShownDialog ) { 
                 dismissDialog(LOADING_DIALOG); 
                 Toast.makeText(this, "Finished..", Toast.LENGTH_LONG).show(); 
@@ -70,17 +78,21 @@ public class AsyncTaskComplex extends AbstractListActivity {
     /**
      * Our complex async task that holds a reference to the Activity that started it,
      * and a boolean to determine if the task completed.
-     * @author Davy
-     *
      */
 	private class ListRefresher extends AsyncTask<Uri, Void, Void> {
 
 		 private AsyncTaskComplex activity; 
          private boolean completed; 
+         
+         private List<Map<String, String>> items = new ArrayList<Map<String, String>>();
         
          private ListRefresher(AsyncTaskComplex activity) { 
                  this.activity = activity; 
          } 
+         
+         public List<Map<String, String>> getItems() {
+			return items;
+		}
          
         /**
          * Showing the dialog on the UI thread.
@@ -95,7 +107,7 @@ public class AsyncTaskComplex extends AbstractListActivity {
          */
 		@Override
 		protected Void doInBackground(Uri... params) {
-			refreshListLongRunning();
+			items = retrieveListLongRunning();		
 			return null;
 		}
 
@@ -108,21 +120,21 @@ public class AsyncTaskComplex extends AbstractListActivity {
                 notifyActivityTaskCompleted(); 
         } 
         
+        private void setActivity(AsyncTaskComplex activity) { 
+                this.activity = activity; 
+                if ( completed ) { 
+                	notifyActivityTaskCompleted(); 
+                } 
+        } 
+        
         /**
          * Helper method to notify the activity that this task was completed.
          */
         private void notifyActivityTaskCompleted() { 
                 if ( null != activity ) { 
-                        activity.onTaskCompleted(); 
+                	activity.onTaskCompleted(); 
                 } 
-        } 
-        
-        private void setActivity(AsyncTaskComplex activity) { 
-                this.activity = activity; 
-                if ( completed ) { 
-                        notifyActivityTaskCompleted(); 
-                } 
-        } 
+        }         
 	}
 	
 	/**

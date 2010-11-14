@@ -1,5 +1,6 @@
 package com.ecs.android.listview.sample;
 
+import android.os.Bundle;
 import android.view.MenuItem;
 
 /**
@@ -11,11 +12,20 @@ import android.view.MenuItem;
 public class AllOnUIThread extends AbstractListActivity {
 
 	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+    	showDialog(LOADING_DIALOG);
+    	this.listItems = retrieveListLongRunning();
+    	refreshListView();
+    	dismissDialog(LOADING_DIALOG);
+	}
+	
+	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    switch (item.getItemId()) {
 		    case R.id.refresh_list:
 		    	showDialog(LOADING_DIALOG);
-		    	refreshListLongRunning();
+		    	this.listItems = retrieveListLongRunning();
 		    	refreshListView();
 		    	dismissDialog(LOADING_DIALOG);
 		        return true;	
@@ -26,6 +36,5 @@ public class AllOnUIThread extends AbstractListActivity {
 		    default:
 		        return super.onOptionsItemSelected(item);
 	    }
-	    
 	}	
 }
