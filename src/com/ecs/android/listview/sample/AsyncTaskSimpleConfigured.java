@@ -1,5 +1,7 @@
 package com.ecs.android.listview.sample;
 
+import android.content.res.Configuration;
+
 /**
  * For this Activity, we're just extending the basic asynctask activity.
  * 
@@ -10,5 +12,11 @@ package com.ecs.android.listview.sample;
  * 
  */
 public class AsyncTaskSimpleConfigured extends AsyncTaskSimple {
+
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+	  super.onConfigurationChanged(newConfig);
+	  setContentView(R.layout.list);
+	}
 
 }

@@ -73,7 +73,7 @@ public class AsyncTaskComplex extends AbstractListActivity {
                 dismissDialog(LOADING_DIALOG); 
                 Toast.makeText(this, "Finished..", Toast.LENGTH_LONG).show(); 
         } 
-} 	
+    } 	
 	
     /**
      * Our complex async task that holds a reference to the Activity that started it,

@@ -17,6 +17,7 @@ import android.view.MenuItem;
  * When the task has finished, we'll dismiss the dialog (back in the UI thread).
  * 
  * As opposed to the AllOnUIThread activity, this time, the progress dialog will be shown properly.
+ * However, problems arise when changing the screen orientation.
  * 
  */
 public class AsyncTaskSimpleStateSaving extends AbstractListActivity {
