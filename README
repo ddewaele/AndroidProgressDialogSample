@@ -1,7 +1,10 @@
 Sample code showing some Activities that display a progress dialog to the user, 
 and have different ways of reacting during screen orientation changes.
 
-Accompanying article can be found here : http://blog.doityourselfandroid.com/2010/11/14/handling-progress-dialogs-and-screen-orientation-changes/
+Accompanying article can be found here : 
+
+<a href="http://blog.doityourselfandroid.com/2010/11/14/handling-progress-dialogs-and-screen-orientation-changes/">
+http://blog.doityourselfandroid.com/2010/11/14/handling-progress-dialogs-and-screen-orientation-changes/</a>
 
 The app allows you to launch the following activities.
 
