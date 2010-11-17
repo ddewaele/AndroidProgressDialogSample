@@ -1,4 +1,4 @@
-Sample code showing some Activities that display a progress dialog to the user, 
+Sample Android application showing some Activities that display a progress dialog to the user, 
 and have different ways of reacting during screen orientation changes.
 
 Accompanying article can be found here : 
